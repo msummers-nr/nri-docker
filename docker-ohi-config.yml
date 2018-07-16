@@ -1,0 +1,7 @@
+integration_name: com.nr.docker-ohi
+
+instances:
+  - name: docker-ohi
+    command: metrics
+    labels:
+      env: production

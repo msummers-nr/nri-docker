@@ -1,0 +1,7 @@
+test.*
+bin*
+vendor/cloud.google*
+vendor/github*
+vendor/gopkg*
+vendor/golang*
+*.tar.gz
