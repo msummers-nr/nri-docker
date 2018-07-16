@@ -28,7 +28,7 @@ type argumentList struct {
 
 const (
 	integrationName    = "com.nr.docker-ohi"
-	integrationVersion = "0.1.0"
+	integrationVersion = "1.0.0"
 )
 
 var args argumentList
