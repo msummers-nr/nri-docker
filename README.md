@@ -1,6 +1,6 @@
 # Docker OHI
 
-- Basically collects "docker stats" info rather then "docker inspect", and collects some additional info
+- Basically collects "docker stats" info rather then "docker inspect", and collects some extra info (throttling, network etc.)
 - Supports docker on windows, and linux
 - Requirements: Must run on Docker host
 
