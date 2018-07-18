@@ -4,6 +4,9 @@
 - Supports docker on windows, and linux
 - Requirements: Must run on Docker host
 
+<img src="./images/ss1.png" alt="ss1">
+
+
 ### Config:
 ```
 api: "1.37" <- Set Docker API Version
