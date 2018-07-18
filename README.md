@@ -4,7 +4,7 @@
 - Supports docker on windows, and linux
 - Requirements: Must run on Docker host
 
-<img src="/images/ss1.png" alt="ss1">
+<img src="./images/ss1.png" alt="ss1">
 
 
 ### Config:
