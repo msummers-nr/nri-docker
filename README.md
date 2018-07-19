@@ -23,6 +23,12 @@ Set GOOS as required before compilation and run 'make'
 Tests will fail if compiling for different platform.
 
 ### Linux
+
+Download the latest release, and run install_linux.sh with Administrative permissions.
+Run chmod +x install_linux.sh on the file incase of any permission issues.
+
+Else, modify install_linux.sh script with paths to suit or copy files as below instructions:
+
 ```
 Copy files into following locations:
 cp ./docker-ohi-config.yml /etc/newrelic-infra/integrations.d/
@@ -33,7 +39,11 @@ cp ./docker-config.yml /var/db/newrelic-infra/custom-integrations/
 cp ./bin/docker-ohi /var/db/newrelic-infra/custom-integrations/
 ```
 
-### Windows
+### Windows Install
+
+Download the latest release, and run install_win.bat with Administrative permissions.
+Else, modify install_win.bat script with paths to suit or copy files as below instructions:
+
 ```
 Copy files into following locations:
 
