@@ -122,7 +122,10 @@ func fetchStats(ctx context.Context, cli *client.Client, entity *integration.Ent
 	dockerStats["Status"] = container.Status
 	dockerStats["Command"] = container.Command
 	dockerStats["Created"] = container.Created
-	dockerStats["Labels"] = createKeyValuePairs(container.Labels)
+	// hsingh:
+	// Multiple labels returned will be treated as seperate attributes
+	// dockerStats["Labels"] =  <== Remove attribute named label
+	createKeyValuePairs(dockerStats, container.Labels)
 	dockerStats["NetworkMode"] = container.HostConfig.NetworkMode
 	dockerStats["SizeRw"] = container.SizeRw
 	dockerStats["SizeRootFs"] = container.SizeRootFs
@@ -297,12 +300,12 @@ func calculateMemPercentUnixNoCache(limit float64, usedNoCache float64) float64 
 	return 0
 }
 
-func createKeyValuePairs(m map[string]string) string {
-	b := new(bytes.Buffer)
+//hsingh
+//Updating to parse multiple labels as attributes
+func createKeyValuePairs(ds map[string]interface{}, m map[string]string) {
 	for key, value := range m {
-		fmt.Fprintf(b, "%s=\"%s\",", key, value)
+		ds[key] = value
 	}
-	return b.String()
 }
 
 func errorLogToInsights(entity *integration.Entity, err error, hostLabel string) {
