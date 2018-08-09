@@ -4,6 +4,8 @@
 - Supports docker on windows, and linux
 - Requirements: Must run on Docker host
 
+### [Download The Latest Release HERE](https://source.datanerd.us/FIT/docker-ohi/releases/tag/v1.1.0)
+
 <img src="./images/ss1.png" alt="ss1">
 
 
