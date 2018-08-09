@@ -24,11 +24,12 @@ import (
 
 type argumentList struct {
 	sdkArgs.DefaultArgumentList
+	Local bool `default:"false" help:"Collect local entity info"`
 }
 
 const (
 	integrationName    = "com.nr.docker-ohi"
-	integrationVersion = "1.0.0"
+	integrationVersion = "1.1.0"
 )
 
 var args argumentList
@@ -71,15 +72,44 @@ var err error
 var yml string
 var c Config
 
-func integrationWithLocalEntity(i *integration.Integration) {
-	hostName, _ := os.Hostname()
-	entity, _ := i.Entity(hostName, ("docker-ohi"))
+func main() {
+
+	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
 	panicOnErr(err)
 
-	getDockerStats(entity)
+	//Load yml config file
+	file, err = ioutil.ReadFile("docker-config.yml")
+	if err != nil {
+		log.Fatal(err)
+	}
+	yml = string(file)
+
+	//Unmarshal yml config
+	c = Config{}
+	err = yaml.Unmarshal([]byte(yml), &c)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	integrationWithLocalEntity(i)
+	panicOnErr(i.Publish())
+
 }
 
-func integrationWithRemoteEntities(i *integration.Integration) {}
+func integrationWithLocalEntity(i *integration.Integration) {
+
+	hostName, _ := os.Hostname()
+	var entity *integration.Entity
+	if args.Local == true {
+		entity = i.LocalEntity()
+	} else {
+		entity, _ = i.Entity(hostName, "docker-ohi")
+	}
+
+	panicOnErr(err)
+	getDockerStats(entity)
+
+}
 
 func getDockerStats(entity *integration.Entity) {
 
@@ -122,9 +152,6 @@ func fetchStats(ctx context.Context, cli *client.Client, entity *integration.Ent
 	dockerStats["Status"] = container.Status
 	dockerStats["Command"] = container.Command
 	dockerStats["Created"] = container.Created
-	// hsingh:
-	// Multiple labels returned will be treated as seperate attributes
-	// dockerStats["Labels"] =  <== Remove attribute named label
 	createKeyValuePairs(dockerStats, container.Labels)
 	dockerStats["NetworkMode"] = container.HostConfig.NetworkMode
 	dockerStats["SizeRw"] = container.SizeRw
@@ -184,34 +211,6 @@ func fetchStats(ctx context.Context, cli *client.Client, entity *integration.Ent
 			}
 		}
 	}
-}
-
-func main() {
-	remoteEntities := false
-	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
-	panicOnErr(err)
-
-	//Load yml config file
-	file, err = ioutil.ReadFile("docker-config.yml")
-	if err != nil {
-		log.Fatal(err)
-	}
-	yml = string(file)
-
-	//Unmarshal yml config
-	c = Config{}
-	err = yaml.Unmarshal([]byte(yml), &c)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if remoteEntities {
-		integrationWithRemoteEntities(i)
-	} else {
-		integrationWithLocalEntity(i)
-	}
-
-	panicOnErr(i.Publish())
 }
 
 func checkExclusions(key string) bool {
@@ -300,8 +299,6 @@ func calculateMemPercentUnixNoCache(limit float64, usedNoCache float64) float64 
 	return 0
 }
 
-//hsingh
-//Updating to parse multiple labels as attributes
 func createKeyValuePairs(ds map[string]interface{}, m map[string]string) {
 	for key, value := range m {
 		ds[key] = value
