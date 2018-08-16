@@ -1,26 +1,20 @@
 # Docker OHI
 
+#### Uses V3 Golang Infra SDK & Docker Golang SDK
+
+### [Download The Latest Release HERE](https://source.datanerd.us/FIT/docker-ohi/releases/latest)
+
 - Basically collects "docker stats" info rather then "docker inspect", and collects some extra info (throttling, network etc.)
 - Supports docker on windows, and linux
 - Requirements: Must run on Docker host
 
 <img src="./images/ss1.png" alt="ss1">
 
-
 ### Config:
 ```
 api: "1.37" <- Set Docker API Version
 exclude: PreviousCPU,PreviousSystem <- Exclude anything you don't want
 ```
-
-### TODO:
-- Tests...
-
-### Compiling
-```
-Set GOOS as required before compilation and run 'make'
-```
-Tests will fail if compiling for different platform.
 
 ### Linux
 
@@ -56,3 +50,9 @@ Program Files/newrelic-infra/custom-integrations/
 Program Files/newrelic-infra/integrations.d/
 - docker-ohi-config.yml
 ```
+
+### Compiling
+```
+Set GOOS as required before compilation and run 'make'
+```
+Tests will fail if compiling for different platform.

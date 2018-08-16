@@ -1,0 +1,114 @@
+{
+    "title": "Docker Stats",
+    "icon": "bar-chart",
+    "grid_column_count": 3,
+    "filter": null,
+    "widgets": [
+        {
+            "title": "No. Docker Hosts",
+            "nrql": "SELECT uniqueCount(Hostname) AS 'Hosts' FROM dockerContainerEvent SINCE 1 minute ago",
+            "process_as": "billboard",
+            "width": 1,
+            "height": 1,
+            "row": 1,
+            "column": 1,
+            "event_types": [
+                "dockerContainerEvent"
+            ],
+            "facet": null,
+            "customizations": {},
+            "notes": null
+        },
+        {
+            "title": "Docker Host CPU % by Host",
+            "nrql": "SELECT latest(HostCPUPerc) AS `CPU %` FROM dockerContainerEvent TIMESERIES FACET Hostname SINCE 30 minutes ago",
+            "process_as": "faceted_area_chart",
+            "width": 1,
+            "height": 1,
+            "row": 1,
+            "column": 2,
+            "event_types": [
+                "dockerContainerEvent"
+            ],
+            "facet": "Hostname",
+            "customizations": null,
+            "notes": null
+        },
+        {
+            "title": "Docker Host Memory % by Host",
+            "nrql": "SELECT latest(HostMemUsedPerc) AS `MemUsed %` FROM dockerContainerEvent TIMESERIES FACET Hostname SINCE 30 minutes ago",
+            "process_as": "faceted_area_chart",
+            "width": 1,
+            "height": 1,
+            "row": 1,
+            "column": 3,
+            "event_types": [
+                "dockerContainerEvent"
+            ],
+            "facet": "Hostname",
+            "customizations": null,
+            "notes": null
+        },
+        {
+            "title": "No. Containers",
+            "nrql": "SELECT uniqueCount(ID) AS 'Containers' FROM dockerContainerEvent SINCE 1 minute ago",
+            "process_as": "billboard",
+            "width": 1,
+            "height": 1,
+            "row": 2,
+            "column": 1,
+            "event_types": [
+                "dockerContainerEvent"
+            ],
+            "facet": null,
+            "customizations": {},
+            "notes": null
+        },
+        {
+            "title": "Container CPU Usage % - By Host,ImageID",
+            "nrql": "SELECT latest(CPUPercent) AS `CPU %` FROM dockerContainerEvent TIMESERIES FACET Hostname,IDShort  SINCE 30 minutes ago",
+            "process_as": "faceted_area_chart",
+            "width": 1,
+            "height": 1,
+            "row": 2,
+            "column": 2,
+            "event_types": [
+                "dockerContainerEvent"
+            ],
+            "facet": "[\"Hostname\", \"IDShort\"]",
+            "customizations": null,
+            "notes": null
+        },
+        {
+            "title": "Container Memory Usage % - By Host,ImageID",
+            "nrql": "SELECT latest(Mem)  FROM dockerContainerEvent TIMESERIES FACET Hostname,IDShort  SINCE 30 minutes ago",
+            "process_as": "faceted_area_chart",
+            "width": 1,
+            "height": 1,
+            "row": 2,
+            "column": 3,
+            "event_types": [
+                "dockerContainerEvent"
+            ],
+            "facet": "[\"Hostname\", \"IDShort\"]",
+            "customizations": null,
+            "notes": null
+        },
+        {
+            "title": "Docker Stats by ID,Hostname",
+            "nrql": "SELECT latest(Image), latest(State), latest(CPUPercent) AS `CPU%`, latest(Mem/1024/1024) AS `Mem MB`, latest(BlkRead/1024/1024) AS `BlkReadMB`, latest(BlkWrite/1024/1024) AS `BlkWriteMB`, latest(NetRx/1024/1024) AS 'NetRxMB', latest(NetTx/1024/1024) AS 'NetTxMB' FROM dockerContainerEvent FACET IDShort, Hostname  SINCE 1 minute ago",
+            "process_as": "facet_table",
+            "width": 3,
+            "height": 1,
+            "row": 3,
+            "column": 1,
+            "event_types": [
+                "dockerContainerEvent"
+            ],
+            "facet": "[\"IDShort\", \"Hostname\"]",
+            "customizations": {},
+            "notes": null
+        }
+    ],
+    "dashboard_account_id": 12345678
+}
