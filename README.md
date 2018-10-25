@@ -27,8 +27,8 @@ Else, modify install_linux.sh script with paths to suit or copy files as below i
 
 ```
 Copy files into following locations:
-cp ./docker-ohi-config.yml /etc/newrelic-infra/integrations.d/
-cp ./docker-ohi-definition.yml /var/db/newrelic-infra/custom-integrations/
+cp ./nri-docker-config.yml /etc/newrelic-infra/integrations.d/
+cp ./nri-docker-def-nix.yml /var/db/newrelic-infra/custom-integrations/
 - - Ensure/Update "os" to "linux" and check that under command section it is docker-ohi && NOT docker-ohi.exe
 
 cp ./bin/docker-ohi /var/db/newrelic-infra/custom-integrations/
@@ -43,12 +43,12 @@ Else, modify install_win.bat script with paths to suit or copy files as below in
 Copy files into following locations:
 
 Program Files/newrelic-infra/custom-integrations/
-- docker-ohi-definition.yml 
+- nri-docker-def-win.yml 
 - - Ensure/Update "os" to "linux" and check that under command section it is docker-ohi.exe && NOT "docker-ohi" without the extension
 - docker-ohi.exe
 
 Program Files/newrelic-infra/integrations.d/
-- docker-ohi-config.yml
+- nri-docker-config.yml
 ```
 
 ### Compiling
