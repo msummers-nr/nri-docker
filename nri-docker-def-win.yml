@@ -1,0 +1,11 @@
+name: com.newrelic.nri-docker
+description: nri-docker
+protocol_version: 2
+os: windows
+
+commands:
+  metrics:
+    command:
+      - nri-docker.exe
+      - --metrics
+    interval: 15

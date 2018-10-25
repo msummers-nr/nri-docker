@@ -1,0 +1,8 @@
+integration_name: com.newrelic.nri-docker
+
+instances:
+  - name: nri-docker
+    command: metrics
+    labels:
+      owner: cloud
+      docker: true

@@ -8,7 +8,7 @@ TEST_DEPS     = github.com/axw/gocov/gocov github.com/AlekSi/gocov-xml
 
 all: build
 
-build: clean validate compile test
+build: clean validate compile
 
 clean:
 	@echo "=== $(INTEGRATION) === [ clean ]: removing binaries and coverage file..."

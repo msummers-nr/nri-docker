@@ -4,5 +4,6 @@ vendor/cloud.google*
 vendor/github*
 vendor/gopkg*
 vendor/golang*
+nri-docker-v*
 docker-ohi-v*
 *.tar.gz
