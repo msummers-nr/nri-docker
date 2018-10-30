@@ -1,0 +1,114 @@
+{
+    "results": [
+        {
+            "events": [
+                {
+                    "event": {
+                        "throttledTime": 0,
+                        "cpuShares": 0,
+                        "netTxErrors": 0,
+                        "netRxErrors": 0,
+                        "pid": 0,
+                        "operatingSystem": "linux",
+                        "memoryReservation": 0,
+                        "memMaxUsage": 0,
+                        "blkWriteBytes": 0,
+                        "cpuQuota": 0,
+                        "hostname": "linuxkit-025000000001",
+                        "event_type": "dockerContainerSample",
+                        "entityName": "linuxkit-025000000001",
+                        "blkioWeight": 0,
+                        "sizeRw": 0,
+                        "state": "created",
+                        "diskQuota": 0,
+                        "networkMode": "default",
+                        "image": "wnameless/oracle-xe-11g",
+                        "netTxDropped": 0,
+                        "created": 1527737472,
+                        "kernelMemory": 0,
+                        "agentName": "Infrastructure",
+                        "mounts": "[],",
+                        "pidsStatsCurrent": 0,
+                        "netRxDropped": 0,
+                        "onlineCPUs": 0,
+                        "systemMemoryBytes": "2095763456",
+                        "CPURealtimeRuntime": 0,
+                        "imageShort": "wnameless/oracle-xe-11g",
+                        "driver": "overlay2",
+                        "integration_version": "2.0.0",
+                        "kernelVersion": "4.9.93-linuxkit-aufs",
+                        "linuxDistribution": "Docker for Mac",
+                        "blkReadBytes": 0,
+                        "previousCPU": 0,
+                        "netTx": 0,
+                        "containerID": "4d13c2646deb5cac4ab5fa9cc198a1cdaed1a6b2c2a41750683dbcf4f9c41363",
+                        "status": "Created",
+                        "pidsStatsLimit": 0,
+                        "systemUsage": 0,
+                        "fullHostname": "linuxkit-025000000001",
+                        "sizeRootFs": 0,
+                        "imageID": "sha256:698cc7361de48917ec297142af5b43f63e955aea14c4f40dceb22b3895f6bfe6",
+                        "restartCount": 0,
+                        "netRxPackets": 0,
+                        "ports": "[],",
+                        "platform": "linux",
+                        "duration": 12767499264,
+                        "externalKey": "linuxkit-025000000001",
+                        "nr.ingestTimeMs": 1540504938000,
+                        "IDShort": "4d13c2646deb",
+                        "mem": 0,
+                        "memUsage": 0,
+                        "memPercent": 0,
+                        "label.docker": "true",
+                        "periods": 0,
+                        "throttledPeriods": 0,
+                        "netTxPackets": 0,
+                        "timestamp": 1540504936000,
+                        "processorCount": "4",
+                        "memorySwap": 0,
+                        "instanceType": " BHYVE",
+                        "entityId": "7866350066961382035",
+                        "coreCount": "1",
+                        "command": "/bin/sh -c '/usr/sbin/startup.sh && tail -f /dev/null'",
+                        "memLimit": 0,
+                        "nanoCPUs": 0,
+                        "cpuRealtimePeriod": 0,
+                        "cpuPeriod": 0,
+                        "label.owner": "cloud",
+                        "memFailCount": 0,
+                        "agentVersion": "1.0.944",
+                        "cpuPercent": 0,
+                        "netRx": 0
+                    }
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "eventTypes": [
+            "dockerContainerSample"
+        ],
+        "eventType": "dockerContainerSample",
+        "openEnded": true,
+        "beginTime": "2018-10-25T21:02:32Z",
+        "endTime": "2018-10-25T22:02:32Z",
+        "beginTimeMillis": 1540501352931,
+        "endTimeMillis": 1540504952931,
+        "rawSince": "60 MINUTES AGO",
+        "rawUntil": "NOW",
+        "rawCompareWith": "",
+        "guid": "b7a3f863-2d72-fd6f-6254-539fe765ef7e",
+        "routerGuid": "426e0224-0e6c-2476-3cf7-4b73b68d3340",
+        "messages": [],
+        "contents": [
+            {
+                "function": "events",
+                "limit": 1,
+                "order": {
+                    "column": "timestamp",
+                    "descending": true
+                }
+            }
+        ]
+    }
+}

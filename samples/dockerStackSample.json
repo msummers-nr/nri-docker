@@ -1,0 +1,60 @@
+{
+    "results": [
+        {
+            "events": [
+                {
+                    "event": {
+                        "fullHostname": "linuxkit-025000000001",
+                        "processorCount": "4",
+                        "instanceType": " BHYVE",
+                        "agentName": "Infrastructure",
+                        "entityId": "7866350066961382035",
+                        "services": 6,
+                        "coreCount": "1",
+                        "operatingSystem": "linux",
+                        "systemMemoryBytes": "2095763456",
+                        "externalKey": "linuxkit-025000000001",
+                        "nr.ingestTimeMs": 1540502608000,
+                        "hostname": "linuxkit-025000000001",
+                        "event_type": "dockerStackSample",
+                        "label.owner": "cloud",
+                        "entityName": "linuxkit-025000000001",
+                        "kernelVersion": "4.9.93-linuxkit-aufs",
+                        "name": "vote",
+                        "label.docker": "true",
+                        "linuxDistribution": "Docker for Mac",
+                        "agentVersion": "1.0.944",
+                        "timestamp": 1540502605000
+                    }
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "eventTypes": [
+            "dockerStackSample"
+        ],
+        "eventType": "dockerStackSample",
+        "openEnded": true,
+        "beginTime": "2018-10-25T21:04:23Z",
+        "endTime": "2018-10-25T22:04:23Z",
+        "beginTimeMillis": 1540501463299,
+        "endTimeMillis": 1540505063299,
+        "rawSince": "60 MINUTES AGO",
+        "rawUntil": "NOW",
+        "rawCompareWith": "",
+        "guid": "36dd2c0d-daa4-3305-92f8-a497d184280f",
+        "routerGuid": "e8a4cfbb-b8b6-ff58-0087-0f7db8074285",
+        "messages": [],
+        "contents": [
+            {
+                "function": "events",
+                "limit": 1,
+                "order": {
+                    "column": "timestamp",
+                    "descending": true
+                }
+            }
+        ]
+    }
+}

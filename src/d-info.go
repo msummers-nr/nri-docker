@@ -43,13 +43,16 @@ func getHostInfo() {
 		setMetric(metricSet, "swarmError", info.Swarm.Error)
 		setMetric(metricSet, "swarmNodeID", info.Swarm.NodeID)
 		setMetric(metricSet, "swarmNodes", info.Swarm.Nodes)
-		setMetric(metricSet, "swarmClusterCreatedAt", info.Swarm.Cluster.CreatedAt.Unix())
-		setMetric(metricSet, "swarmClusterDuration", makeTimestamp()-(info.Swarm.Cluster.CreatedAt.Unix()*1000))
-		setMetric(metricSet, "swarmClusterUpdatedAt", info.Swarm.Cluster.UpdatedAt.Unix())
-		setMetric(metricSet, "swarmClusterID", info.Swarm.Cluster.ID)
-		setMetric(metricSet, "swarmClusterVersionIndex", info.Swarm.Cluster.Version.Index)
-		setMetric(metricSet, "swarmManagers", info.Swarm.Managers)
-		setMetric(metricSet, "swarmNodeAddr", info.Swarm.NodeAddr)
+
+		if info.Swarm.Cluster != nil {
+			setMetric(metricSet, "swarmClusterCreatedAt", info.Swarm.Cluster.CreatedAt.Unix())
+			setMetric(metricSet, "swarmClusterDuration", makeTimestamp()-(info.Swarm.Cluster.CreatedAt.Unix()*1000))
+			setMetric(metricSet, "swarmClusterUpdatedAt", info.Swarm.Cluster.UpdatedAt.Unix())
+			setMetric(metricSet, "swarmClusterID", info.Swarm.Cluster.ID)
+			setMetric(metricSet, "swarmClusterVersionIndex", info.Swarm.Cluster.Version.Index)
+			setMetric(metricSet, "swarmManagers", info.Swarm.Managers)
+			setMetric(metricSet, "swarmNodeAddr", info.Swarm.NodeAddr)
+		}
 
 	} else {
 		errorLogToInsights(entity, err)

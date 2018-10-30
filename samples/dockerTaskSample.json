@@ -1,0 +1,76 @@
+{
+    "results": [
+        {
+            "events": [
+                {
+                    "event": {
+                        "fullHostname": "linuxkit-025000000001",
+                        "operatingSystem": "linux",
+                        "duration": 1538962096128,
+                        "externalKey": "linuxkit-025000000001",
+                        "createdAt": 1540471424,
+                        "nr.ingestTimeMs": 1540502608000,
+                        "hostname": "linuxkit-025000000001",
+                        "event_type": "dockerTaskSample",
+                        "entityName": "linuxkit-025000000001",
+                        "label.docker": "true",
+                        "state": "shutdown",
+                        "com.docker.stack.namespace": "vote",
+                        "nodeID": "gwpuaos8k5jtwt2914n5tc9n8",
+                        "taskID": "xs8x25qhlqa7e266lxtltd6vi",
+                        "updatedAt": 1540498688,
+                        "timestamp": 1540502605000,
+                        "image": "redis:alpine@sha256:6a9540142534c63da7aec6137b68ecc888d1505aecfc83755c579a97dc4330fe",
+                        "desiredState": "shutdown",
+                        "processorCount": "4",
+                        "instanceType": " BHYVE",
+                        "agentName": "Infrastructure",
+                        "entityId": "7866350066961382035",
+                        "message": "shutdown",
+                        "coreCount": "1",
+                        "containerPID": 0,
+                        "systemMemoryBytes": "2095763456",
+                        "versionIndex": 418,
+                        "containerExitCode": 0,
+                        "imageShort": "redis:alpine",
+                        "label.owner": "cloud",
+                        "integration_version": "2.0.0",
+                        "kernelVersion": "4.9.93-linuxkit-aufs",
+                        "statusTimestamp": 1540498688,
+                        "linuxDistribution": "Docker for Mac",
+                        "agentVersion": "1.0.944",
+                        "serviceID": "is0cr70hz622fgp59mu503pm8",
+                        "containerID": "6ce87f9e3edab5d3f189126a8fcc0ce9c58f5f99f16897ffc30b711d991bcf79"
+                    }
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "eventTypes": [
+            "dockerTaskSample"
+        ],
+        "eventType": "dockerTaskSample",
+        "openEnded": true,
+        "beginTime": "2018-10-25T21:04:54Z",
+        "endTime": "2018-10-25T22:04:54Z",
+        "beginTimeMillis": 1540501494810,
+        "endTimeMillis": 1540505094810,
+        "rawSince": "60 MINUTES AGO",
+        "rawUntil": "NOW",
+        "rawCompareWith": "",
+        "guid": "cc51381c-2ee7-6b94-ccf2-63631fd74214",
+        "routerGuid": "e8ca4f20-9891-bfa1-3c00-b9d6ac0b7378",
+        "messages": [],
+        "contents": [
+            {
+                "function": "events",
+                "limit": 1,
+                "order": {
+                    "column": "timestamp",
+                    "descending": true
+                }
+            }
+        ]
+    }
+}

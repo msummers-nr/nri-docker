@@ -1,0 +1,90 @@
+{
+    "results": [
+        {
+            "events": [
+                {
+                    "event": {
+                        "serverVersion": "18.06.1-ce",
+                        "operatingSystem": "linux",
+                        "containersRunning": 2,
+                        "hostname": "linuxkit-025000000001",
+                        "event_type": "dockerInfoSample",
+                        "swarmState": "active",
+                        "entityName": "linuxkit-025000000001",
+                        "eventsListeners": 2,
+                        "goroutines": 169,
+                        "swarmNodeAddr": "192.168.65.3",
+                        "ID": "OKPF:RWZX:VWY6:YN2Y:V3WO:FYQ5:KKYI:6YWJ:PCTK:SXDQ:6R5P:GMFH",
+                        "swarmClusterID": "z3e9eaz2wfcl8u77k3k91pzv8",
+                        "images": 215,
+                        "swarmClusterVersionIndex": 280,
+                        "agentName": "Infrastructure",
+                        "serverGitCommit": "e68fc7a",
+                        "systemMemoryBytes": "2095763456",
+                        "swarmClusterCreatedAt": 1540338944,
+                        "swarmNodeID": "gwpuaos8k5jtwt2914n5tc9n8",
+                        "integration_version": "2.0.0",
+                        "kernelVersion": "4.9.93-linuxkit-aufs",
+                        "name": "linuxkit-025000000001",
+                        "linuxDistribution": "Docker for Mac",
+                        "containers": 28,
+                        "swarmNodes": 1,
+                        "swarmControlAvailable": "true",
+                        "fullHostname": "linuxkit-025000000001",
+                        "containersPaused": 0,
+                        "serverGoVersion": "go1.10.3",
+                        "serverApiVersion": "1.38",
+                        "swapLimit": "true",
+                        "externalKey": "linuxkit-025000000001",
+                        "nr.ingestTimeMs": 1540505005000,
+                        "osType": "linux",
+                        "label.docker": "true",
+                        "swarmClusterDuration": 166020928,
+                        "containersStopped": 26,
+                        "swarmManagers": 1,
+                        "timestamp": 1540505004000,
+                        "cpus": 4,
+                        "processorCount": "4",
+                        "memTotal": 2095763456,
+                        "instanceType": " BHYVE",
+                        "entityId": "7866350066961382035",
+                        "coreCount": "1",
+                        "memLimit": "true",
+                        "serverBuildTime": "2018-08-21T17:29:02.000000000+00:00",
+                        "label.owner": "cloud",
+                        "agentVersion": "1.0.944",
+                        "arch": "x86_64",
+                        "swarmClusterUpdatedAt": 1540460800
+                    }
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "eventTypes": [
+            "dockerInfoSample"
+        ],
+        "eventType": "dockerInfoSample",
+        "openEnded": true,
+        "beginTime": "2018-10-25T21:03:40Z",
+        "endTime": "2018-10-25T22:03:40Z",
+        "beginTimeMillis": 1540501420176,
+        "endTimeMillis": 1540505020176,
+        "rawSince": "60 MINUTES AGO",
+        "rawUntil": "NOW",
+        "rawCompareWith": "",
+        "guid": "a5bd9a20-948e-b24c-6a71-7b43a19352f9",
+        "routerGuid": "11c8eade-4211-91de-c2ef-77eb60eff763",
+        "messages": [],
+        "contents": [
+            {
+                "function": "events",
+                "limit": 1,
+                "order": {
+                    "column": "timestamp",
+                    "descending": true
+                }
+            }
+        ]
+    }
+}

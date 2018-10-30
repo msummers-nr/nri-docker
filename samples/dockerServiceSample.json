@@ -1,0 +1,73 @@
+{
+    "results": [
+        {
+            "events": [
+                {
+                    "event": {
+                        "fullHostname": "linuxkit-025000000001",
+                        "APP": "VOTING",
+                        "operatingSystem": "linux",
+                        "duration": 1538962227200,
+                        "endpointMode": "vip",
+                        "mode": "replicated",
+                        "externalKey": "linuxkit-025000000001",
+                        "createdAt": 1540339072,
+                        "nr.ingestTimeMs": 1540502608000,
+                        "hostname": "linuxkit-025000000001",
+                        "event_type": "dockerServiceSample",
+                        "entityName": "linuxkit-025000000001",
+                        "replicasCurrent": 1,
+                        "annotationsName": "vote_worker",
+                        "label.docker": "true",
+                        "com.docker.stack.namespace": "vote",
+                        "updatedAt": 1540471424,
+                        "timestamp": 1540502605000,
+                        "com.docker.stack.image": "dockersamples/examplevotingapp_worker",
+                        "processorCount": "4",
+                        "instanceType": " BHYVE",
+                        "agentName": "Infrastructure",
+                        "entityId": "7866350066961382035",
+                        "coreCount": "1",
+                        "systemMemoryBytes": "2095763456",
+                        "versionIndex": 378,
+                        "label.owner": "cloud",
+                        "integration_version": "2.0.0",
+                        "kernelVersion": "4.9.93-linuxkit-aufs",
+                        "name": "vote_worker",
+                        "linuxDistribution": "Docker for Mac",
+                        "agentVersion": "1.0.944",
+                        "serviceID": "fo30gb1bcf68v4eeewp2ttqpn",
+                        "replicasExpected": 1
+                    }
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "eventTypes": [
+            "dockerServiceSample"
+        ],
+        "eventType": "dockerServiceSample",
+        "openEnded": true,
+        "beginTime": "2018-10-25T21:04:01Z",
+        "endTime": "2018-10-25T22:04:01Z",
+        "beginTimeMillis": 1540501441713,
+        "endTimeMillis": 1540505041713,
+        "rawSince": "60 MINUTES AGO",
+        "rawUntil": "NOW",
+        "rawCompareWith": "",
+        "guid": "2d88285b-38ad-1ae1-a3fc-84d27d3cae86",
+        "routerGuid": "ded0d299-acbe-53ee-cf34-4a2abc213e62",
+        "messages": [],
+        "contents": [
+            {
+                "function": "events",
+                "limit": 1,
+                "order": {
+                    "column": "timestamp",
+                    "descending": true
+                }
+            }
+        ]
+    }
+}
