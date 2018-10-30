@@ -16,7 +16,7 @@ func getNodes(entity *integration.Entity, cli *client.Client) {
 
 	nodes, err := cli.NodeList(ctx, types.NodeListOptions{})
 	if err != nil {
-		errorLogToInsights(entity, err)
+		errorLogToInsights(err)
 	} else {
 
 		sort.Slice(nodes, func(i, j int) bool {

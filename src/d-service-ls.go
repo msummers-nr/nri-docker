@@ -29,11 +29,11 @@ func getServices() {
 			}
 			tasks, err := cli.TaskList(ctx, types.TaskListOptions{Filters: taskFilter})
 			if err != nil {
-				errorLogToInsights(entity, err)
+				errorLogToInsights(err)
 			}
 			nodes, err := cli.NodeList(ctx, types.NodeListOptions{})
 			if err != nil {
-				errorLogToInsights(entity, err)
+				errorLogToInsights(err)
 			}
 			if err == nil {
 				GetServicesStatus(services, nodes, tasks)

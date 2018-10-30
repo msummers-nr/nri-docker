@@ -26,13 +26,14 @@ type argumentList struct {
 
 const (
 	integrationName    = "com.newrelic.nri-docker"
-	integrationVersion = "2.0.1"
+	integrationVersion = "2.0.2"
 )
 
 var args argumentList
 
 var file = []byte{}
 var err error
+var swarmState = "inactive"
 
 func main() {
 	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
@@ -62,9 +63,11 @@ func integrationWithLocalEntity(i *integration.Integration) {
 	}
 
 	getHostInfo()
-	getServices()
-	getTasks()
 	getContainerInfo()
+	getServices()
+	if swarmState == "active" {
+		getTasks()
+	}
 }
 
 // setDockerClient - Required as there can be edge cases when the integration API version, may need a matching or lower API version then the hosts docker API version
@@ -164,7 +167,7 @@ func createKeyValuePairs(ds map[string]interface{}, m map[string]string) {
 	}
 }
 
-func errorLogToInsights(entity *integration.Entity, err error) {
+func errorLogToInsights(err error) {
 	errorMetricSet, _ := entity.NewMetricSet("dockerIntegrationError")
 	errorMetricSet.SetMetric("errorMsg", err.Error(), metric.ATTRIBUTE)
 	errorMetricSet.SetMetric("hostname", hostname, metric.ATTRIBUTE)

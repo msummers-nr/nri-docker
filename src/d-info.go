@@ -39,10 +39,13 @@ func getHostInfo() {
 		}
 
 		setMetric(metricSet, "swarmState", fmt.Sprintf("%v", info.Swarm.LocalNodeState))
+		swarmState = fmt.Sprintf("%v", info.Swarm.LocalNodeState)
 		setMetric(metricSet, "swarmControlAvailable", fmt.Sprintf("%v", info.Swarm.ControlAvailable))
 		setMetric(metricSet, "swarmError", info.Swarm.Error)
 		setMetric(metricSet, "swarmNodeID", info.Swarm.NodeID)
 		setMetric(metricSet, "swarmNodes", info.Swarm.Nodes)
+		setMetric(metricSet, "swarmManagers", info.Swarm.Managers)
+		setMetric(metricSet, "swarmNodeAddr", info.Swarm.NodeAddr)
 
 		if info.Swarm.Cluster != nil {
 			setMetric(metricSet, "swarmClusterCreatedAt", info.Swarm.Cluster.CreatedAt.Unix())
@@ -50,11 +53,9 @@ func getHostInfo() {
 			setMetric(metricSet, "swarmClusterUpdatedAt", info.Swarm.Cluster.UpdatedAt.Unix())
 			setMetric(metricSet, "swarmClusterID", info.Swarm.Cluster.ID)
 			setMetric(metricSet, "swarmClusterVersionIndex", info.Swarm.Cluster.Version.Index)
-			setMetric(metricSet, "swarmManagers", info.Swarm.Managers)
-			setMetric(metricSet, "swarmNodeAddr", info.Swarm.NodeAddr)
 		}
 
 	} else {
-		errorLogToInsights(entity, err)
+		errorLogToInsights(err)
 	}
 }

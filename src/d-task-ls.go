@@ -6,13 +6,14 @@ import (
 	"strings"
 
 	"github.com/docker/docker/api/types"
+	"github.com/newrelic/infra-integrations-sdk/log"
 )
 
 func getTasks() {
 	ctx := context.Background()
 	tasks, err := cli.TaskList(ctx, types.TaskListOptions{})
 	if err != nil {
-		errorLogToInsights(entity, err)
+		log.Debug(err.Error())
 	} else {
 		for _, task := range tasks {
 			metricSet := newMetricSet("dockerTaskSample")

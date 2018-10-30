@@ -14,7 +14,7 @@ import (
 func getContainerInfo() {
 	ctx := context.Background()
 	containers, err := cli.ContainerList(ctx, types.ContainerListOptions{All: true, Since: "24 hours ago"})
-	panicOnErr(err)
+	errorLogToInsights(err)
 
 	var wg sync.WaitGroup
 	wg.Add(len(containers))
