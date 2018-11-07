@@ -75,8 +75,12 @@ func GetServicesStatus(services []swarm.Service, nodes []swarm.Node, tasks []swa
 		setMetric(metricSet, "endpointMode", fmt.Sprintf("%v", service.Endpoint.Spec.Mode))
 
 		if service.UpdateStatus != nil {
-			setMetric(metricSet, "updateStatusCompletedAt", service.UpdateStatus.CompletedAt.Unix())
-			setMetric(metricSet, "updateStatusStartedAt", service.UpdateStatus.StartedAt.Unix())
+			if service.UpdateStatus.CompletedAt != nil {
+				setMetric(metricSet, "updateStatusCompletedAt", service.UpdateStatus.CompletedAt.Unix())
+			}
+			if service.UpdateStatus.StartedAt != nil {
+				setMetric(metricSet, "updateStatusStartedAt", service.UpdateStatus.StartedAt.Unix())
+			}
 			setMetric(metricSet, "updateStatusMessage", fmt.Sprintf("%v", service.UpdateStatus.Message))
 			setMetric(metricSet, "updateStatusState", fmt.Sprintf("%v", service.UpdateStatus.State))
 		}
