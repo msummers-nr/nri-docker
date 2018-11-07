@@ -26,7 +26,7 @@ type argumentList struct {
 
 const (
 	integrationName    = "com.newrelic.nri-docker"
-	integrationVersion = "2.0.3"
+	integrationVersion = "2.0.4"
 )
 
 var args argumentList
@@ -65,7 +65,9 @@ func integrationWithLocalEntity(i *integration.Integration) {
 	getHostInfo()
 	getContainerInfo()
 	getServices()
+
 	if swarmState == "active" {
+		getNodes()
 		getTasks()
 	}
 }

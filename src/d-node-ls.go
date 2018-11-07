@@ -6,12 +6,10 @@ import (
 	"sort"
 
 	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/client"
-	"github.com/newrelic/infra-integrations-sdk/integration"
 	"vbom.ml/util/sortorder"
 )
 
-func getNodes(entity *integration.Entity, cli *client.Client) {
+func getNodes() {
 	ctx := context.Background()
 
 	nodes, err := cli.NodeList(ctx, types.NodeListOptions{})
