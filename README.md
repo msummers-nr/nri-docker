@@ -10,6 +10,12 @@
 
 <!-- <img src="./images/ss1.png" alt="ss1"> -->
 
+### Setup
+- Download latest release [here](https://source.datanerd.us/FIT/nri-docker/releases/)
+- Extract package
+- Run included installer script for your desired OS `install_linux.sh` or `install_win.bat`;
+- Else follow container setup below
+
 ### Containerized
 ```
 docker build -t nri-docker .
