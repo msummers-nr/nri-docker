@@ -33,9 +33,11 @@ func getNodes() {
 			setMetric(metricSet, "createdAt", node.CreatedAt.Unix())
 			setMetric(metricSet, "duration", makeTimestamp()-node.CreatedAt.Unix())
 			setMetric(metricSet, "updatedAt", node.UpdatedAt.Unix())
-			setMetric(metricSet, "managerStatusLeader", node.ManagerStatus.Leader)
-			setMetric(metricSet, "managerStatusReachability", fmt.Sprintf("%v", node.ManagerStatus.Reachability))
-			setMetric(metricSet, "managerStatusAddr", node.ManagerStatus.Addr)
+			if node.ManagerStatus != nil {
+				setMetric(metricSet, "managerStatusLeader", node.ManagerStatus.Leader)
+				setMetric(metricSet, "managerStatusReachability", fmt.Sprintf("%v", node.ManagerStatus.Reachability))
+				setMetric(metricSet, "managerStatusAddr", node.ManagerStatus.Addr)
+			}
 			setMetric(metricSet, "availability", fmt.Sprintf("%v", node.Spec.Availability))
 			setMetric(metricSet, "name", fmt.Sprintf("%v", node.Spec.Name))
 			setMetric(metricSet, "role", fmt.Sprintf("%v", node.Spec.Role))

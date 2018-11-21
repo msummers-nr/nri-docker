@@ -1,0 +1,18 @@
+{
+    "availability": "active",
+    "createdAt": 1541568331,
+    "descHostname": "linuxkit-025000000001",
+    "duration": 1540027161507,
+    "engineVersion": "18.06.1-ce",
+    "event_type": "dockerNodeSample",
+    "integration_version": "2.0.4",
+    "managerStatusAddr": "192.168.65.3:2377",
+    "managerStatusLeader": "true",
+    "managerStatusReachability": "reachable",
+    "nodeID": "bpw5weflaq1jbr7lzg3h792ka",
+    "platformArch": "x86_64",
+    "platformOS": "linux",
+    "role": "manager",
+    "state": "ready",
+    "updatedAt": 1541568331
+  }
