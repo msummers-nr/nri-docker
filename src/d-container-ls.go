@@ -9,6 +9,7 @@ import (
 	"sync"
 
 	"github.com/docker/docker/api/types"
+	"github.com/newrelic/infra-integrations-sdk/log"
 )
 
 func getContainerInfo() {
@@ -32,12 +33,6 @@ func getContainerInfo() {
 func fetchStats(ctx context.Context, container types.Container) {
 	metricSet := newMetricSet("dockerContainerSample")
 	setMetric(metricSet, "hostname", hostname)
-
-	// docker container stats
-	stats, _ := cli.ContainerStats(ctx, container.ID, false)
-	var containerStats types.StatsJSON
-	json.NewDecoder(stats.Body).Decode(&containerStats)
-
 	setMetric(metricSet, "containerID", container.ID)
 	setMetric(metricSet, "IDShort", container.ID[0:12])
 	setMetric(metricSet, "image", container.Image)
@@ -66,90 +61,102 @@ func fetchStats(ctx context.Context, container types.Container) {
 	fmt.Fprintf(b, "%v,", container.Mounts)
 	setMetric(metricSet, "mounts", b.String())
 
-	netRx, netTx, netRxErrors, netTxErrors, netRxDropped, netTxDropped, netRxPackets, netTxPackets := calculateNetwork(containerStats.Networks)
-
-	setMetric(metricSet, "netRx", netRx)
-	setMetric(metricSet, "netTx", netTx)
-	setMetric(metricSet, "netRxErrors", netRxErrors)
-	setMetric(metricSet, "netTxErrors", netTxErrors)
-	setMetric(metricSet, "netRxDropped", netRxDropped)
-	setMetric(metricSet, "netTxDropped", netTxDropped)
-	setMetric(metricSet, "netRxPackets", netRxPackets)
-	setMetric(metricSet, "netTxPackets", netTxPackets)
-
-	if stats.OSType == "windows" {
-		setMetric(metricSet, "cpuPercent", calculateCPUPercentWindows(containerStats))
-		setMetric(metricSet, "blkReadSizeBytes", containerStats.StorageStats.ReadSizeBytes)
-		setMetric(metricSet, "blkWriteSizeBytes", containerStats.StorageStats.WriteSizeBytes)
-		setMetric(metricSet, "mem", float64(containerStats.MemoryStats.PrivateWorkingSet))
-		setMetric(metricSet, "numProcs", containerStats.NumProcs)
-		setMetric(metricSet, "memCommitBytes", containerStats.MemoryStats.Commit)
-		setMetric(metricSet, "memCommitPeakBytes", containerStats.MemoryStats.CommitPeak)
-		setMetric(metricSet, "memPrivateWorkingSet", containerStats.MemoryStats.PrivateWorkingSet)
+	//docker stats data
+	stats, err := cli.ContainerStats(ctx, container.ID, false)
+	if err != nil {
+		log.Debug(err.Error())
 	} else {
-		setMetric(metricSet, "previousCPU", containerStats.PreCPUStats.CPUUsage.TotalUsage)
-		setMetric(metricSet, "onlineCPUs", containerStats.CPUStats.OnlineCPUs)
-		setMetric(metricSet, "systemUsage", containerStats.CPUStats.SystemUsage)
-		setMetric(metricSet, "cpuPercent", calculateCPUPercentUnix(containerStats.PreCPUStats.CPUUsage.TotalUsage, containerStats.PreCPUStats.SystemUsage, containerStats))
-		blkReadBytes, blkWriteBytes := calculateBlockIO(containerStats.BlkioStats)
-		setMetric(metricSet, "blkReadBytes", blkReadBytes)
-		setMetric(metricSet, "blkWriteBytes", blkWriteBytes)
-		mem := calculateMemUsageUnixNoCache(containerStats.MemoryStats)
-		setMetric(metricSet, "mem", mem)
-		memLimit := float64(containerStats.MemoryStats.Limit)
-		setMetric(metricSet, "memLimit", memLimit)
-		setMetric(metricSet, "memPercent", calculateMemPercentUnixNoCache(memLimit, mem))
-		setMetric(metricSet, "memUsage", float64(containerStats.MemoryStats.Usage))
-		setMetric(metricSet, "memMaxUsage", float64(containerStats.MemoryStats.MaxUsage))
-		setMetric(metricSet, "memFailCount", float64(containerStats.MemoryStats.Failcnt))
-		setMetric(metricSet, "pidsStatsCurrent", float64(containerStats.PidsStats.Current))
-		setMetric(metricSet, "pidsStatsLimit", float64(containerStats.PidsStats.Limit))
-		setMetric(metricSet, "periods", float64(containerStats.CPUStats.ThrottlingData.Periods))
-		setMetric(metricSet, "throttledPeriods", float64(containerStats.CPUStats.ThrottlingData.ThrottledPeriods))
-		setMetric(metricSet, "throttledTime", float64(containerStats.CPUStats.ThrottlingData.ThrottledTime))
-	}
+		var containerStats types.StatsJSON
+		json.NewDecoder(stats.Body).Decode(&containerStats)
 
-	//docker inspect data
-	containerInspect, _ := cli.ContainerInspect(ctx, container.ID)
-	setMetric(metricSet, "restartCount", containerInspect.RestartCount)
-	setMetric(metricSet, "platform", containerInspect.Platform)
-	setMetric(metricSet, "driver", containerInspect.Driver)
-	setMetric(metricSet, "nanoCPUs", containerInspect.HostConfig.NanoCPUs)
-	setMetric(metricSet, "cpuShares", containerInspect.HostConfig.CPUShares)
+		netRx, netTx, netRxErrors, netTxErrors, netRxDropped, netTxDropped, netRxPackets, netTxPackets := calculateNetwork(containerStats.Networks)
+		setMetric(metricSet, "netRx", netRx)
+		setMetric(metricSet, "netTx", netTx)
+		setMetric(metricSet, "netRxErrors", netRxErrors)
+		setMetric(metricSet, "netTxErrors", netTxErrors)
+		setMetric(metricSet, "netRxDropped", netRxDropped)
+		setMetric(metricSet, "netTxDropped", netTxDropped)
+		setMetric(metricSet, "netRxPackets", netRxPackets)
+		setMetric(metricSet, "netTxPackets", netTxPackets)
 
-	if containerInspect.Node != nil {
-		setMetric(metricSet, "nodeID", containerInspect.Node.ID)
-		setMetric(metricSet, "nodeName", containerInspect.Node.Name)
-		setMetric(metricSet, "nodeAddr", containerInspect.Node.Addr)
-		setMetric(metricSet, "nodeMemory", containerInspect.Node.Memory)
-		for key, val := range containerInspect.Node.Labels {
-			setMetric(metricSet, key, val)
+		if stats.OSType == "windows" {
+			setMetric(metricSet, "cpuPercent", calculateCPUPercentWindows(containerStats))
+			setMetric(metricSet, "blkReadSizeBytes", containerStats.StorageStats.ReadSizeBytes)
+			setMetric(metricSet, "blkWriteSizeBytes", containerStats.StorageStats.WriteSizeBytes)
+			setMetric(metricSet, "mem", float64(containerStats.MemoryStats.PrivateWorkingSet))
+			setMetric(metricSet, "numProcs", containerStats.NumProcs)
+			setMetric(metricSet, "memCommitBytes", containerStats.MemoryStats.Commit)
+			setMetric(metricSet, "memCommitPeakBytes", containerStats.MemoryStats.CommitPeak)
+			setMetric(metricSet, "memPrivateWorkingSet", containerStats.MemoryStats.PrivateWorkingSet)
+		} else {
+			setMetric(metricSet, "previousCPU", containerStats.PreCPUStats.CPUUsage.TotalUsage)
+			setMetric(metricSet, "onlineCPUs", containerStats.CPUStats.OnlineCPUs)
+			setMetric(metricSet, "systemUsage", containerStats.CPUStats.SystemUsage)
+			setMetric(metricSet, "cpuPercent", calculateCPUPercentUnix(containerStats.PreCPUStats.CPUUsage.TotalUsage, containerStats.PreCPUStats.SystemUsage, containerStats))
+			blkReadBytes, blkWriteBytes := calculateBlockIO(containerStats.BlkioStats)
+			setMetric(metricSet, "blkReadBytes", blkReadBytes)
+			setMetric(metricSet, "blkWriteBytes", blkWriteBytes)
+			mem := calculateMemUsageUnixNoCache(containerStats.MemoryStats)
+			setMetric(metricSet, "mem", mem)
+			memLimit := float64(containerStats.MemoryStats.Limit)
+			setMetric(metricSet, "memLimit", memLimit)
+			setMetric(metricSet, "memPercent", calculateMemPercentUnixNoCache(memLimit, mem))
+			setMetric(metricSet, "memUsage", float64(containerStats.MemoryStats.Usage))
+			setMetric(metricSet, "memMaxUsage", float64(containerStats.MemoryStats.MaxUsage))
+			setMetric(metricSet, "memFailCount", float64(containerStats.MemoryStats.Failcnt))
+			setMetric(metricSet, "pidsStatsCurrent", float64(containerStats.PidsStats.Current))
+			setMetric(metricSet, "pidsStatsLimit", float64(containerStats.PidsStats.Limit))
+			setMetric(metricSet, "periods", float64(containerStats.CPUStats.ThrottlingData.Periods))
+			setMetric(metricSet, "throttledPeriods", float64(containerStats.CPUStats.ThrottlingData.ThrottledPeriods))
+			setMetric(metricSet, "throttledTime", float64(containerStats.CPUStats.ThrottlingData.ThrottledTime))
 		}
 	}
 
-	setMetric(metricSet, "pid", containerInspect.State.Pid)
-	if containerInspect.State.Health != nil {
-		setMetric(metricSet, "failingStreak", containerInspect.State.Health.FailingStreak)
-		setMetric(metricSet, "finishedAt", containerInspect.State.FinishedAt)
-	}
-
-	if stats.OSType == "windows" {
-		setMetric(metricSet, "cpuCount", containerInspect.HostConfig.CPUCount)
-		setMetric(metricSet, "ioMaximumIOps", containerInspect.HostConfig.IOMaximumIOps)
-		setMetric(metricSet, "ioMaximumBandwidth", containerInspect.HostConfig.IOMaximumBandwidth)
-		setMetric(metricSet, "isolation", containerInspect.HostConfig.Isolation)
+	//docker inspect data
+	containerInspect, err := cli.ContainerInspect(ctx, container.ID)
+	if err != nil {
+		log.Debug(err.Error())
 	} else {
-		setMetric(metricSet, "cgroupParent", containerInspect.HostConfig.CgroupParent)
-		setMetric(metricSet, "cpuPeriod", containerInspect.HostConfig.CPUPeriod)
-		setMetric(metricSet, "cpuQuota", containerInspect.HostConfig.CPUQuota)
-		setMetric(metricSet, "cpuRealtimePeriod", containerInspect.HostConfig.CPURealtimePeriod)
-		setMetric(metricSet, "CPURealtimeRuntime", containerInspect.HostConfig.CPURealtimeRuntime)
-		setMetric(metricSet, "blkioWeight", containerInspect.HostConfig.BlkioWeight)
-		setMetric(metricSet, "diskQuota", containerInspect.HostConfig.DiskQuota)
-		setMetric(metricSet, "kernelMemory", containerInspect.HostConfig.KernelMemory)
-		setMetric(metricSet, "memoryReservation", containerInspect.HostConfig.MemoryReservation)
-		setMetric(metricSet, "memorySwap", containerInspect.HostConfig.MemorySwap)
-		setMetric(metricSet, "memorySwappiness", containerInspect.HostConfig.MemorySwappiness)
+		setMetric(metricSet, "restartCount", containerInspect.RestartCount)
+		setMetric(metricSet, "platform", containerInspect.Platform)
+		setMetric(metricSet, "driver", containerInspect.Driver)
+		setMetric(metricSet, "nanoCPUs", containerInspect.HostConfig.NanoCPUs)
+		setMetric(metricSet, "cpuShares", containerInspect.HostConfig.CPUShares)
+
+		if containerInspect.Node != nil {
+			setMetric(metricSet, "nodeID", containerInspect.Node.ID)
+			setMetric(metricSet, "nodeName", containerInspect.Node.Name)
+			setMetric(metricSet, "nodeAddr", containerInspect.Node.Addr)
+			setMetric(metricSet, "nodeMemory", containerInspect.Node.Memory)
+			for key, val := range containerInspect.Node.Labels {
+				setMetric(metricSet, key, val)
+			}
+		}
+
+		setMetric(metricSet, "pid", containerInspect.State.Pid)
+		if containerInspect.State.Health != nil {
+			setMetric(metricSet, "failingStreak", containerInspect.State.Health.FailingStreak)
+			setMetric(metricSet, "finishedAt", containerInspect.State.FinishedAt)
+		}
+
+		if stats.OSType == "windows" {
+			setMetric(metricSet, "cpuCount", containerInspect.HostConfig.CPUCount)
+			setMetric(metricSet, "ioMaximumIOps", containerInspect.HostConfig.IOMaximumIOps)
+			setMetric(metricSet, "ioMaximumBandwidth", containerInspect.HostConfig.IOMaximumBandwidth)
+			setMetric(metricSet, "isolation", containerInspect.HostConfig.Isolation)
+		} else {
+			setMetric(metricSet, "cgroupParent", containerInspect.HostConfig.CgroupParent)
+			setMetric(metricSet, "cpuPeriod", containerInspect.HostConfig.CPUPeriod)
+			setMetric(metricSet, "cpuQuota", containerInspect.HostConfig.CPUQuota)
+			setMetric(metricSet, "cpuRealtimePeriod", containerInspect.HostConfig.CPURealtimePeriod)
+			setMetric(metricSet, "CPURealtimeRuntime", containerInspect.HostConfig.CPURealtimeRuntime)
+			setMetric(metricSet, "blkioWeight", containerInspect.HostConfig.BlkioWeight)
+			setMetric(metricSet, "diskQuota", containerInspect.HostConfig.DiskQuota)
+			setMetric(metricSet, "kernelMemory", containerInspect.HostConfig.KernelMemory)
+			setMetric(metricSet, "memoryReservation", containerInspect.HostConfig.MemoryReservation)
+			setMetric(metricSet, "memorySwap", containerInspect.HostConfig.MemorySwap)
+			setMetric(metricSet, "memorySwappiness", containerInspect.HostConfig.MemorySwappiness)
+		}
 	}
 }
 
