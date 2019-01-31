@@ -20,9 +20,6 @@ func getTasks() {
 			setMetric(metricSet, "taskID", task.ID)
 			setMetric(metricSet, "nodeID", task.NodeID)
 			setMetric(metricSet, "serviceID", task.ServiceID)
-			setMetric(metricSet, "image", task.Spec.ContainerSpec.Image)
-			img := strings.Split(task.Spec.ContainerSpec.Image, "@")
-			setMetric(metricSet, "imageShort", img[0])
 			setMetric(metricSet, "desiredState", task.DesiredState)
 			setMetric(metricSet, "createdAt", task.CreatedAt.Unix())
 			setMetric(metricSet, "duration", makeTimestamp()-task.CreatedAt.Unix())
@@ -30,17 +27,24 @@ func getTasks() {
 			setMetric(metricSet, "name", task.Name)
 			setMetric(metricSet, "annotationsName", task.Annotations.Name)
 			setMetric(metricSet, "versionIndex", task.Version.Index)
-			setMetric(metricSet, "containerID", task.Status.ContainerStatus.ContainerID)
-			setMetric(metricSet, "containerExitCode", task.Status.ContainerStatus.ExitCode)
-			setMetric(metricSet, "containerPID", task.Status.ContainerStatus.PID)
+			if task.Status.ContainerStatus != nil {
+				setMetric(metricSet, "containerID", task.Status.ContainerStatus.ContainerID)
+				setMetric(metricSet, "containerExitCode", task.Status.ContainerStatus.ExitCode)
+				setMetric(metricSet, "containerPID", task.Status.ContainerStatus.PID)
+			}
 			setMetric(metricSet, "error", task.Status.Err)
 			setMetric(metricSet, "message", task.Status.Message)
 			setMetric(metricSet, "state", fmt.Sprintf("%v", task.Status.State))
 			setMetric(metricSet, "statusTimestamp", task.Status.Timestamp.Unix())
 			setMetric(metricSet, "desiredState", fmt.Sprintf("%v", task.DesiredState))
 
-			if task.Spec.ContainerSpec.Healthcheck != nil {
-				setMetric(metricSet, "healthcheckRetries", task.Spec.ContainerSpec.Healthcheck.Retries)
+			if task.Spec.ContainerSpec != nil {
+				setMetric(metricSet, "image", task.Spec.ContainerSpec.Image)
+				img := strings.Split(task.Spec.ContainerSpec.Image, "@")
+				setMetric(metricSet, "imageShort", img[0])
+				if task.Spec.ContainerSpec.Healthcheck != nil {
+					setMetric(metricSet, "healthcheckRetries", task.Spec.ContainerSpec.Healthcheck.Retries)
+				}
 			}
 
 			for key, val := range task.Spec.ContainerSpec.Labels {

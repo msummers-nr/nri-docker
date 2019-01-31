@@ -122,7 +122,7 @@ func GetServicesStatus(services []swarm.Service, nodes []swarm.Node, tasks []swa
 	}
 
 	for stack, val := range m {
-		metricSet, _ := entity.NewMetricSet("dockerStackSample")
+		metricSet := newMetricSet("dockerStackSample")
 		setMetric(metricSet, "name", stack)
 		setMetric(metricSet, "services", val.Services)
 	}

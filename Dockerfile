@@ -1,4 +1,3 @@
-
 #build linux binary first
 FROM newrelic/infrastructure
 

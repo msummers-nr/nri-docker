@@ -11,7 +11,7 @@
 <!-- <img src="./images/ss1.png" alt="ss1"> -->
 
 ### Setup
-- Download latest release [here](https://source.datanerd.us/FIT/nri-docker/releases/)
+- Download latest compiled release [here](https://source.datanerd.us/FIT/nri-docker/releases/) (Do not download the source code!)
 - Extract package
 - Run included installer script for your desired OS `install_linux.sh` or `install_win.bat`;
 - Else follow container setup below
@@ -50,7 +50,7 @@ Copy files into following locations:
 
 Program Files/newrelic-infra/custom-integrations/
 - nri-docker-def-win.yml 
-- - Ensure/Update "os" to "linux" and check that under command section it is docker-ohi.exe && NOT "docker-ohi" without the extension
+- - Ensure/Update "os" to "windows" and check that under command section it is docker-ohi.exe && NOT "docker-ohi" without the extension
 - docker-ohi.exe
 
 Program Files/newrelic-infra/integrations.d/
