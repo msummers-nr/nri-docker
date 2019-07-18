@@ -7,3 +7,15 @@ vendor/golang*
 nri-docker-v*
 docker-ohi-v*
 *.tar.gz
+bin*
+*.tar
+*.old
+vendor*
+coverage*
+.DS_Store
+examples_*
+CHANGELOG_*
+flex-*
+cmd/flex/flex*
+cmd/nri-flex/flex*
+dump*

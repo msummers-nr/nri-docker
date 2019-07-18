@@ -1,73 +1,55 @@
-INTEGRATION  := $(shell basename $(shell pwd))
-BINARY_NAME   = $(INTEGRATION)
-GO_PKGS      := $(shell go list ./... | grep -v "/vendor/")
-GO_FILES     := $(shell find src -type f -name "*.go")
-VALIDATE_DEPS = github.com/golang/lint/golint
-DEPS          = github.com/kardianos/govendor
-TEST_DEPS     = github.com/axw/gocov/gocov github.com/AlekSi/gocov-xml
+PROJECT_NAME := $(shell basename $(shell pwd))
+PROJECT_VER  := $(shell git describe --tags --always --dirty | sed -e '/^v/s/^v\(.*\)$$/\1/g') # Strip leading 'v' if found
+GO_PKGS      := $(shell go list ./... | grep -v -e "/vendor/" -e "/example")
+NATIVEOS     := $(shell go version | awk -F '[ /]' '{print $$4}')
+NATIVEARCH   := $(shell go version | awk -F '[ /]' '{print $$5}')
+SRCDIR       ?= .
+BUILD_DIR    := ./bin/
+COVERAGE_DIR := ./coverage/
+COVERMODE     = atomic
+
+GO_CMD        = go
+GODOC         = godocdown
+GOLINTER      = golangci-lint
+
+# Determine packages by looking into pkg/*
+ifneq ("$(wildcard ${SRCDIR}/pkg/*)","")
+	PACKAGES  = $(wildcard ${SRCDIR}/pkg/*)
+endif
+ifneq ("$(wildcard ${SRCDIR}/internal/*)","")
+	PACKAGES += $(wildcard ${SRCDIR}/internal/*)
+endif
+
+# Determine commands by looking into cmd/*
+COMMANDS = $(wildcard ${SRCDIR}/cmd/*)
+
+GO_FILES := $(shell find $(COMMANDS) $(PACKAGES) -type f -name "*.go")
+
+# Determine binary names by stripping out the dir names
+BINS=$(foreach cmd,${COMMANDS},$(notdir ${cmd}))
+
+# LDFLAGS='-X main.Version=$(PROJECT_VER)'
+LDFLAGS='-X source.datanerd.us/FIT/nri-docker/internal/lib.IntegrationVersion=$(PROJECT_VER)'
 
 all: build
 
-build: clean validate compile
+# Humans running make:
+build: check-version clean lint test-unit coverage compile document
+
+# Build command for CI tooling
+build-ci: check-version clean lint test compile-only
 
 clean:
-	@echo "=== $(INTEGRATION) === [ clean ]: removing binaries and coverage file..."
-	@rm -rfv bin coverage.xml
+	@echo "=== $(PROJECT_NAME) === [ clean            ]: removing binaries and coverage file..."
+	@rm -rfv $(BUILD_DIR)/* $(COVERAGE_DIR)/*
 
-validate-deps:
-	@echo "=== $(INTEGRATION) === [ validate-deps ]: installing validation dependencies..."
-	@go get -v $(VALIDATE_DEPS)
+# Import fragments
+include build/deps.mk
+include build/compile.mk
+include build/testing.mk
+include build/package.mk
+include build/util.mk
+include build/document.mk
+include build/docker.mk
 
-validate-only:
-	@printf "=== $(INTEGRATION) === [ validate ]: running gofmt... "
-	@OUTPUT="$(shell gofmt -l $(GO_FILES))" ;\
-	if [ -z "$$OUTPUT" ]; then \
-		echo "passed." ;\
-	else \
-		echo "failed. Incorrect syntax in the following files:" ;\
-		echo "$$OUTPUT" ;\
-		exit 1 ;\
-	fi
-	@printf "=== $(INTEGRATION) === [ validate ]: running golint... "
-	@OUTPUT="$(shell golint $(GO_PKGS))" ;\
-	if [ -z "$$OUTPUT" ]; then \
-		echo "passed." ;\
-	else \
-		echo "failed. Issues found:" ;\
-		echo "$$OUTPUT" ;\
-		exit 1 ;\
-	fi
-	@printf "=== $(INTEGRATION) === [ validate ]: running go vet... "
-	@OUTPUT="$(shell go vet $(GO_PKGS))" ;\
-	if [ -z "$$OUTPUT" ]; then \
-		echo "passed." ;\
-	else \
-		echo "failed. Issues found:" ;\
-		echo "$$OUTPUT" ;\
-		exit 1;\
-	fi
-
-validate: validate-deps validate-only
-
-compile-deps:
-	@echo "=== $(INTEGRATION) === [ compile-deps ]: installing build dependencies..."
-	@go get $(DEPS)
-	@govendor sync
-
-compile-only:
-	@echo "=== $(INTEGRATION) === [ compile ]: building $(BINARY_NAME)..."
-	@go build -o bin/$(BINARY_NAME) $(GO_FILES)
-
-compile: compile-deps compile-only
-
-test-deps: compile-deps
-	@echo "=== $(INTEGRATION) === [ test-deps ]: installing testing dependencies..."
-	@go get -v $(TEST_DEPS)
-
-test-only:
-	@echo "=== $(INTEGRATION) === [ test ]: running unit tests..."
-	@gocov test $(GO_PKGS) | gocov-xml > coverage.xml
-
-test: test-deps test-only
-
-.PHONY: all build clean validate-deps validate-only validate compile-deps compile-only compile test-deps test-only test
+.PHONY: all build build-ci package
