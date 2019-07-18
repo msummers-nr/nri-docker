@@ -11,7 +11,7 @@ import (
 )
 
 var IntegrationName = "com.newrelic.nri-docker"
-var IntegrationVersion = "2.1.2"
+var IntegrationVersion = "Unknown-SNAPSHOT"
 var Hostname = ""
 var SwarmState = "inactive"
 
