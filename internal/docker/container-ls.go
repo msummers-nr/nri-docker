@@ -37,6 +37,8 @@ func GetContainerInfo(cli *client.Client, entity *integration.Entity) {
 // FetchStats x
 func FetchStats(ctx context.Context, container types.Container, cli *client.Client, entity *integration.Entity) {
 	metricSet := lib.NewMetricSet("dockerContainerSample", entity)
+	lib.SetMetric(metricSet, "host", lib.Hostname)     // correlation purpose
+	lib.SetMetric(metricSet, "nodeName", lib.Hostname) // correlation purpose
 	lib.SetMetric(metricSet, "hostname", lib.Hostname)
 	lib.SetMetric(metricSet, "containerId", container.ID)
 	lib.SetMetric(metricSet, "IDShort", container.ID[0:12])
@@ -63,6 +65,11 @@ func FetchStats(ctx context.Context, container types.Container, cli *client.Clie
 	lib.SetMetric(metricSet, "sizeRootFs", container.SizeRootFs)
 
 	for key, val := range container.Labels {
+		if key == "com.amazonaws.ecs.cluster" {
+			lib.SetMetric(metricSet, "clusterName", val)
+		} else if key == "com.amazonaws.ecs.task-definition-family" {
+			lib.SetMetric(metricSet, "taskName", val)
+		}
 		lib.SetMetric(metricSet, key, val)
 	}
 
@@ -130,6 +137,21 @@ func FetchStats(ctx context.Context, container types.Container, cli *client.Clie
 	if err != nil {
 		log.Debug(err.Error())
 	} else {
+
+		// decorate containers with additional attributes
+		if containerInspect.Config != nil {
+			for _, envVar := range containerInspect.Config.Env {
+				if strings.HasPrefix(envVar, "NRDI_") {
+					lib.ApplyLabel(envVar, metricSet, "")
+				}
+
+				// add appName
+				if strings.HasPrefix(envVar, "NEW_RELIC_APP_NAME") {
+					lib.ApplyLabel(envVar, metricSet, "appName")
+				}
+			}
+		}
+
 		lib.SetMetric(metricSet, "restartCount", containerInspect.RestartCount)
 		lib.SetMetric(metricSet, "platform", containerInspect.Platform)
 		lib.SetMetric(metricSet, "driver", containerInspect.Driver)

@@ -93,3 +93,16 @@ func PanicOnErr(err error) {
 func MakeTimestamp() int64 {
 	return time.Now().UnixNano() / int64(time.Millisecond)
 }
+
+func ApplyLabel(label string, metricSet *metric.Set, customKey string) {
+	labelSplit := strings.SplitN(label, "=", 2)
+	if len(labelSplit) == 2 {
+		if labelSplit[0] != "" && labelSplit[1] != "" {
+			key := labelSplit[0]
+			if customKey != "" {
+				key = customKey
+			}
+			SetMetric(metricSet, key, labelSplit[1])
+		}
+	}
+}

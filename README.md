@@ -7,6 +7,8 @@
 - Supports Docker on Windows, and Linux
 - Supports any orchestrator including Docker Swarm
 - Able to run within a container or on host
+- Detect and set NEW_RELIC_APP_NAME environment variable if available
+- Add custom attributes via NRDI_* environment variables
 
 <!-- <img src="./images/ss1.png" alt="ss1"> -->
 
@@ -22,6 +24,13 @@ docker build -t nri-docker .
 
 docker run -d --name nri-docker --network=host --cap-add=SYS_PTRACE -v "/:/host:ro" -v "/var/run/docker.sock:/var/run/docker.sock" -e NRIA_LICENSE_KEY="newrelicInfrastructureKEY" nri-docker:latest
 
+```
+
+### Decorating With Additional Custom Attributes via Environment Variables
+```
+Multiple custom attributes can be set via NRDI_ attributes (New Relic Docker Integration) eg.
+NRDI_OWNER=nr.expert.services
+NRDI_TEAM=loud
 ```
 
 ### Linux

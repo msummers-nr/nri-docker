@@ -24,6 +24,8 @@ func GetHostInfo(cli *client.Client, entity *integration.Entity) {
 		lib.SetMetric(metricSet, "kernelVersion", info.KernelVersion)
 		lib.SetMetric(metricSet, "osType", info.OSType)
 		lib.SetMetric(metricSet, "arch", info.Architecture)
+		lib.SetMetric(metricSet, "nodeName", info.Name) // correlation purpose
+		lib.SetMetric(metricSet, "host", info.Name)     // correlation purpose
 		lib.SetMetric(metricSet, "name", info.Name)
 		lib.SetMetric(metricSet, "ID", info.ID)
 		lib.SetMetric(metricSet, "goroutines", info.NGoroutines)
@@ -33,6 +35,10 @@ func GetHostInfo(cli *client.Client, entity *integration.Entity) {
 		lib.SetMetric(metricSet, "swapLimit", info.SwapLimit)
 		lib.SetMetric(metricSet, "memTotal", info.MemTotal)
 		lib.SetMetric(metricSet, "memLimit", info.MemoryLimit)
+
+		for _, label := range info.Labels {
+			lib.ApplyLabel(label, metricSet, "")
+		}
 
 		serverVersion, err := cli.ServerVersion(ctx)
 		if err == nil {
