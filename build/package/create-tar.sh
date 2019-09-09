@@ -13,11 +13,11 @@ mkdir -p ${BUILD_DIR}
 
 cp ./bin/${OS}/* ${BUILD_DIR}/
 cp ./README.md ${BUILD_DIR}/
-cp ./Dockerfile ${BUILD_DIR}/
 [ -f "./scripts/install_${OS}.sh" ] && cp ./scripts/install_${OS}.sh ${BUILD_DIR}/
 [ -f "./scripts/install_${OS}.bat" ] && cp ./scripts/install_${OS}.bat ${BUILD_DIR}/
 cp ./configs/nri-docker-config.yml ${BUILD_DIR}/
 cp ./configs/nri-docker-def-${OS}.yml ${BUILD_DIR}/${COMMAND}-definition.yml
+cp ./configs/Dockerfile-${OS} ${BUILD_DIR}/Dockerfile
 
 # Create the gzip
 tar -C ${TEMPDIR} -czf ${OUTPUT_NAME}.tar.gz ${OUTPUT_NAME}/
