@@ -18,4 +18,4 @@ CHANGELOG_*
 flex-*
 cmd/flex/flex*
 cmd/nri-flex/flex*
-dump*
+.idea
