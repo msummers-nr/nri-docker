@@ -9,8 +9,8 @@ import (
 	"github.com/docker/docker/api/types/filters"
 	"github.com/docker/docker/api/types/swarm"
 	"github.com/docker/docker/client"
+	"github.com/newrelic-experimental/nri-docker/internal/lib"
 	"github.com/newrelic/infra-integrations-sdk/integration"
-	"source.datanerd.us/FIT/nri-docker/internal/lib"
 	"vbom.ml/util/sortorder"
 )
 

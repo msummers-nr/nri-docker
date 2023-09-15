@@ -7,9 +7,9 @@ import (
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
+	"github.com/newrelic-experimental/nri-docker/internal/lib"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	log "github.com/newrelic/infra-integrations-sdk/log"
-	"source.datanerd.us/FIT/nri-docker/internal/lib"
 )
 
 // GetTasks x

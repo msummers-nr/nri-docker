@@ -4,8 +4,8 @@ import (
 	"os"
 
 	"github.com/docker/docker/client"
-	"source.datanerd.us/FIT/nri-docker/internal/docker"
-	"source.datanerd.us/FIT/nri-docker/internal/lib"
+	nrdocker "github.com/newrelic-experimental/nri-docker/internal/docker"
+	"github.com/newrelic-experimental/nri-docker/internal/lib"
 
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
@@ -41,7 +41,7 @@ func integrationWithLocalEntity(i *integration.Integration) {
 	}
 
 	nrdocker.GetHostInfo(cli, entity)
-	nrdocker.GetContainerInfo(cli, entity)
+	nrdocker.GetContainerInfo(cli, entity, i)
 	nrdocker.GetServices(cli, entity)
 
 	if lib.SwarmState == "active" {

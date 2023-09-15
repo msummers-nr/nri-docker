@@ -15,7 +15,7 @@
 <!-- <img src="./images/ss1.png" alt="ss1"> -->
 
 ### Setup
-- Download latest compiled release [here](https://source.datanerd.us/FIT/nri-docker/releases/) (Do not download the source code!)
+- Download latest compiled release [here](https://github.com/newrelic-experimental/nri-docker/releases/) (Do not download the source code!)
 - Extract package
 - Run included installer script for your desired OS `install_linux.sh` or `install_win.bat`;
 - Else follow container setup below
@@ -70,7 +70,8 @@ Program Files/newrelic-infra/integrations.d/
 
 ### Compiling
 ```
-Set GOOS as required before compilation and run 'make'
+Windows eg.
+GOOS=windows go build -o ./bin/windows/nri-docker.exe ./cmd/nri-docker/nri-docker.go
 ```
 Tests will fail if compiling for different platform.
 

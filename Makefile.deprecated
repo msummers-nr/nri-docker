@@ -29,7 +29,7 @@ GO_FILES := $(shell find $(COMMANDS) $(PACKAGES) -type f -name "*.go")
 BINS=$(foreach cmd,${COMMANDS},$(notdir ${cmd}))
 
 # LDFLAGS='-X main.Version=$(PROJECT_VER)'
-LDFLAGS='-X source.datanerd.us/FIT/nri-docker/internal/lib.IntegrationVersion=$(PROJECT_VER)'
+LDFLAGS='-X github.com/newrelic-experimental/nri-docker/internal/lib.IntegrationVersion=$(PROJECT_VER)'
 
 all: build
 

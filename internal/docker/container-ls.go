@@ -10,13 +10,13 @@ import (
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
+	"github.com/newrelic-experimental/nri-docker/internal/lib"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	log "github.com/newrelic/infra-integrations-sdk/log"
-	"source.datanerd.us/FIT/nri-docker/internal/lib"
 )
 
 // GetContainerInfo x
-func GetContainerInfo(cli *client.Client, entity *integration.Entity) {
+func GetContainerInfo(cli *client.Client, entity *integration.Entity, i *integration.Integration) {
 	ctx := context.Background()
 	containers, err := cli.ContainerList(ctx, types.ContainerListOptions{All: true, Since: "24 hours ago"})
 	if err != nil {
@@ -28,24 +28,27 @@ func GetContainerInfo(cli *client.Client, entity *integration.Entity) {
 	for _, container := range containers {
 		go func(container types.Container) {
 			defer wg.Done()
-			FetchStats(ctx, container, cli, entity)
+			FetchStats(ctx, container, cli, entity, i)
 		}(container)
 	}
 	wg.Wait()
 }
 
 // FetchStats x
-func FetchStats(ctx context.Context, container types.Container, cli *client.Client, entity *integration.Entity) {
-	metricSet := lib.NewMetricSet("dockerContainerSample", entity)
+func FetchStats(ctx context.Context, container types.Container, cli *client.Client, entity *integration.Entity, i *integration.Integration) {
+	containerEntity, _ := i.Entity(container.ID, "docker")
+	// containerMetricSet := lib.NewMetricSet("ContainerSample",containerEntity)
+
+	metricSet := lib.NewMetricSet("ContainerSample", containerEntity)
 	lib.SetMetric(metricSet, "host", lib.Hostname)     // correlation purpose
 	lib.SetMetric(metricSet, "nodeName", lib.Hostname) // correlation purpose
 	lib.SetMetric(metricSet, "hostname", lib.Hostname)
 	lib.SetMetric(metricSet, "containerId", container.ID)
 	lib.SetMetric(metricSet, "IDShort", container.ID[0:12])
-	lib.SetMetric(metricSet, "image", container.Image)
+	lib.SetMetric(metricSet, "imageName", container.Image)
 	img := strings.Split(container.Image, "@")
 	lib.SetMetric(metricSet, "imageShort", img[0])
-	lib.SetMetric(metricSet, "imageId", container.ImageID)
+	lib.SetMetric(metricSet, "image", container.ImageID)
 	lib.SetMetric(metricSet, "state", container.State)
 	lib.SetMetric(metricSet, "status", container.Status)
 	lib.SetMetric(metricSet, "command", container.Command)

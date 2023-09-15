@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/docker/docker/client"
+	"github.com/newrelic-experimental/nri-docker/internal/lib"
 	"github.com/newrelic/infra-integrations-sdk/integration"
-	"source.datanerd.us/FIT/nri-docker/internal/lib"
 )
 
 // GetHostInfo x

@@ -41,10 +41,12 @@ build-windows: compile-windows
 compile-windows: deps-only
 	@echo "=== $(PROJECT_NAME) === [ compile-windows  ]: building commands:"
 	@mkdir -p $(BUILD_DIR)/windows
+
+
 	@for b in $(BINS); do \
 		OUTPUT_FILE="$(BUILD_DIR)windows/$$b.exe" ; \
 		echo "=== $(PROJECT_NAME) === [ compile-windows  ]:     $$OUTPUT_FILE"; \
 		BUILD_FILES=`find $(SRCDIR)/cmd/$$b -type f -name "*.go"` ; \
-		GOOS=windows $(GO) build -ldflags=$(LDFLAGS) -o $$OUTPUT_FILE $$BUILD_FILES ; \
+		echo $$OUTPUT_FILE $$BUILD_FILES; \
+		GOOS=windows $(GO) build -mod=readonly -ldflags=$(LDFLAGS) -o $$OUTPUT_FILE $$BUILD_FILES ; \
 	done
-

@@ -7,8 +7,8 @@ import (
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
+	"github.com/newrelic-experimental/nri-docker/internal/lib"
 	"github.com/newrelic/infra-integrations-sdk/integration"
-	"source.datanerd.us/FIT/nri-docker/internal/lib"
 	"vbom.ml/util/sortorder"
 	// "vbom.ml/util/sortorder"
 )
