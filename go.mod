@@ -25,9 +25,10 @@ require (
 	github.com/pkg/errors v0.8.1-0.20180311214515-816c9085562c // indirect
 	github.com/sirupsen/logrus v1.1.2-0.20181021100920-4fabf2fffcec // indirect
 	github.com/xlab/handysort v0.0.0-20150421192137-fb3537ed64a1 // indirect
-	golang.org/x/crypto v0.0.0-20181015023909-0c41d7ab0a0e // indirect
-	golang.org/x/net v0.0.0-20180826012351-8a410e7b638d // indirect
-	golang.org/x/sys v0.0.0-20210616094352-59db8d763f22 // indirect
+	golang.org/x/crypto v0.17.0 // indirect
+	golang.org/x/net v0.10.0 // indirect
+	golang.org/x/sys v0.15.0 // indirect
+	golang.org/x/term v0.15.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	google.golang.org/genproto v0.0.0-20181016170114-94acd270e44e // indirect
 	google.golang.org/grpc v1.2.1-0.20181023180738-d7518259e000 // indirect
